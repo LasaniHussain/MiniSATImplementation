@@ -79,7 +79,7 @@ int unit_propagation(vector<vector<int> > &clauses,vector<int> &variables,vector
 				unit_clause_found = true;
 				variables[clauses[i][0] / 2] = clauses[i][0] % 2; 
 				variable_freq[clauses[i][0] / 2] = -1; 
-				int result = apply_transform(f, f.clauses[i][0] /2); 
+				int result = apply_transform(clauses,variables, clauses[i][0] /2); 
 				if (result == ST|| result == UST) 
 				{
 					return result;
