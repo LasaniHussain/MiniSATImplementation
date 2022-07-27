@@ -95,9 +95,38 @@ int unit_propagation(vector<vector<int> > &clauses,vector<int> &variables,vector
 
   return NM;
 }
-void transformation(vector<vector<int> > &clauses,vector<int> &variables,vector<int> &variable_freq,vector<int> &variable_sign,int &var_cnt,int &cl_cnt)
-{
-	
+void transformation(vector<vector<int> > &clauses,vector<int> &variables,int lit_to_apply)
+{	int val_to_apply = variables[lit_to_apply];
+	for (int i = 0; i < clauses.size(); i++) 
+	{
+
+    	for (int j = 0; j < clauses[i].size(); j++) 
+		{
+      
+			if ((2 * lit_to_apply + val_to_apply) == clauses[i][j]) 
+			{
+				clauses.erase(clauses.begin() + i); 
+				i--;                
+				if (clauses.size() ==0) 
+				{
+				return ST;
+				}
+				break; 
+			} 
+			else if (clauses[i][j] / 2 == literal_to_apply) 
+			{
+				clauses[i].erase(clauses[i].begin() +j); 
+				j--;    
+				if (clauses[i].size()==0) 
+				{
+					return UST;
+				}
+				break; 
+			}
+		}
+    }
+  // the function is exiting normally
+  return NM;
 }
 int main()
 {	// Read from input file in DIMAS format
