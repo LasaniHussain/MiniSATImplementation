@@ -1,6 +1,11 @@
 #include<bits/stdc++.h>
 using namespace std;
-void clear_and_resize(vector<vector<int> > &clauses,vector<int> &variables,vector<int> &variable_freq,vector<int> &variable_sign,int var_cnt,int cl_count)
+
+#define ST 0
+#define UST 0
+#define NM 0
+#define COMP 0
+void clear_and_resize(vector<vector<int> > &clauses,vector<int> &variables,vector<int> &variable_freq,vector<int> &variable_sign,int var_cnt,int cl_cnt)
 {	clauses.clear();
 	clauses.resize(cl_cnt);
 
@@ -14,7 +19,7 @@ void clear_and_resize(vector<vector<int> > &clauses,vector<int> &variables,vecto
 	variable_sign.resize(var_cnt,0);
 
 }
-void read(vector<vector<int> > &clauses,vector<int> &variables,vector<int> &variable_freq,vector<int> &variable_sign)
+void read(vector<vector<int> > &clauses,vector<int> &variables,vector<int> &variable_freq,vector<int> &variable_sign,int &var_cnt,int &cl_cnt)
 {
 	string s;
 	char ch;
@@ -32,7 +37,7 @@ void read(vector<vector<int> > &clauses,vector<int> &variables,vector<int> &vari
 	}
 	cin>>s;//consume "cnf"
 	cout<<s;
-	int var_cnt,cl_cnt;
+	//int var_cnt,cl_cnt;
 	cin>>var_cnt>>cl_cnt;
 	clear_and_resize(clauses,variables,variable_freq,variable_sign,var_cnt,cl_cnt);
 	for(int i=0;i<cl_cnt;i++)
@@ -57,11 +62,51 @@ void read(vector<vector<int> > &clauses,vector<int> &variables,vector<int> &vari
 		}
 	}
 }
+int unit_propagation(vector<vector<int> > &clauses,vector<int> &variables,vector<int> &variable_freq,vector<int> &variable_sign,int &var_cnt,int &cl_cnt)
+{
+	bool unit_clause_found =false; // current iteration found a unit clause
+	if (clauses.size() == 0) // formula contains no clauses
+	{
+		return UST; // vacuously true
+	}
+  	do 
+	{
+		unit_clause_found = false;
+		for (int i = 0; i < clauses.size(); i++) 
+		{
+			if (clauses[i].size() ==1) 
+			{
+				unit_clause_found = true;
+				variables[clauses[i][0] / 2] = clauses[i][0] % 2; 
+				variable_freq[clauses[i][0] / 2] = -1; 
+				int result = apply_transform(f, f.clauses[i][0] /2); 
+				if (result == ST|| result == UST) 
+				{
+					return result;
+				}
+				break; // exit loop , check for another unit clause from the start
+			} 
+			else if (clauses[i].size() == 0) // if a given clause is empty
+			{
+				return UST; // the formula is unsatisfiable in this branch
+			}
+		}
+  	} while (unit_clause_found);
+
+  return NM;
+}
+void transformation(vector<vector<int> > &clauses,vector<int> &variables,vector<int> &variable_freq,vector<int> &variable_sign,int &var_cnt,int &cl_cnt)
+{
+	
+}
 int main()
 {	// Read from input file in DIMAS format
-	vector<vector<int> > clauses();
+	vector<vector<int> > clauses;
 	vector<int> variables,variable_freq,variable_sign;
-	read(clauses,variables,variable_freq,variable_sign);
+	int var_cnt,cl_cnt;
+	read(clauses,variables,variable_freq,variable_sign,var_cnt,cl_cnt);
+
+	unit_propagation(clauses,variables,variable_freq,variable_sign,var_cnt,cl_cnt);
 
 	for(auto cl:clauses)
 	{
