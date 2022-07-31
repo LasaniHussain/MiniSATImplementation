@@ -5,7 +5,8 @@ using namespace std;
 #define UST 1
 #define NM 2
 #define COMP 3
-void clear_and_resize(vector<vector<int> > &clauses,vector<int> &variables,vector<int> &variable_freq,vector<int> &variable_sign,int var_cnt,int cl_cnt)
+void clear_and_resize(vector<vector<int> > &clauses,vector<int> &variables,vector<int> &variable_freq,vector<int> &variable_sign,
+int var_cnt,int cl_cnt)
 {	clauses.clear();
 	clauses.resize(cl_cnt);
 
@@ -19,7 +20,8 @@ void clear_and_resize(vector<vector<int> > &clauses,vector<int> &variables,vecto
 	variable_sign.resize(var_cnt,0);
 
 }
-void read(vector<vector<int> > &clauses,vector<int> &variables,vector<int> &variable_freq,vector<int> &variable_sign,int &var_cnt,int &cl_cnt)
+void read(vector<vector<int> > &clauses,vector<int> &variables,vector<int> &variable_freq,
+vector<int> &variable_sign,int &var_cnt,int &cl_cnt)
 {
 	string s;
 	char ch;
@@ -36,8 +38,6 @@ void read(vector<vector<int> > &clauses,vector<int> &variables,vector<int> &vari
 		break;
 	}
 	cin>>s;//consume "cnf"
-	//cout<<s;
-	
 	cin>>var_cnt>>cl_cnt;
 	clear_and_resize(clauses,variables,variable_freq,variable_sign,var_cnt,cl_cnt);
 	for(int i=0;i<cl_cnt;i++)
@@ -66,17 +66,15 @@ int transformation(vector<vector<int> > &clauses,vector<int> &variables,int lit_
 {	int val_to_apply = variables[lit_to_apply];
 	for (int i = 0; i < clauses.size(); i++) 
 	{
-
     	for (int j = 0; j < clauses[i].size(); j++) 
 		{
-      
 			if ((2 * lit_to_apply + val_to_apply) == clauses[i][j]) 
 			{
 				clauses.erase(clauses.begin() + i); 
 				i--;                
 				if (clauses.size() ==0) 
 				{
-				return ST;
+					return ST;
 				}
 				break; 
 			} 
@@ -92,7 +90,6 @@ int transformation(vector<vector<int> > &clauses,vector<int> &variables,int lit_
 			}
 		}
     }
-  // the function is exiting normally
   return NM;
 }
 int unit_propagation(vector<vector<int> > &clauses,vector<int> &variables,vector<int> &variable_freq,vector<int> &variable_sign,int &var_cnt,int &cl_cnt)
@@ -129,7 +126,8 @@ int unit_propagation(vector<vector<int> > &clauses,vector<int> &variables,vector
   return NM;
 }
 
-void display_result(vector<vector<int> > &clauses,vector<int> &variables,vector<int> &variable_freq,vector<int> &variable_sign,int &var_cnt,int &cl_cnt,int result)
+void display_result(vector<vector<int> > &clauses,vector<int> &variables,vector<int> &variable_freq,
+vector<int> &variable_sign,int &var_cnt,int &cl_cnt,int result)
 {
 	if (result == ST) // if the formula is satisfiable
   	{
@@ -156,7 +154,8 @@ void display_result(vector<vector<int> > &clauses,vector<int> &variables,vector<
 		cout << "UNSAT";
 	}
 }
-int DPLL(vector<vector<int> > &clauses,vector<int> &variables,vector<int> &variable_freq,vector<int> &variable_sign,int &var_cnt,int &cl_cnt) 
+int DPLL(vector<vector<int> > &clauses,vector<int> &variables,vector<int> &variable_freq,
+vector<int> &variable_sign,int &var_cnt,int &cl_cnt) 
 {
   int result = unit_propagation(clauses,variables,variable_freq,variable_sign,var_cnt,cl_cnt); // perform unit propagation on the formula
   if (result == ST) // if formula satisfied, show result and return
@@ -213,14 +212,6 @@ int main()
 	int var_cnt,cl_cnt;
 	read(clauses,variables,variable_freq,variable_sign,var_cnt,cl_cnt);
 
-	unit_propagation(clauses,variables,variable_freq,variable_sign,var_cnt,cl_cnt);
-
-	/*for(auto cl:clauses)
-	{
-		for(auto var:cl)
-			cout<<var<<" ";
-		cout<<"\n";
-	}*/
 	int result = DPLL(clauses,variables,variable_freq,variable_sign,var_cnt,cl_cnt); 
 	if (result == NM) 
 	{
